@@ -125,9 +125,9 @@ const calculaDifPos = (sumaTotal) => {
     let efectivoPos = document.getElementById('efectivo-pos').value;
     console.log('total' + sumaTotal + 'efectivo pos' + efectivoPos);
     if (!isNaN(efectivoPos) && efectivoPos !== '') {
-        difPos = parseFloat(efectivoPos) - sumaTotal;
+        difPos -= parseFloat(efectivoPos);
     }
-    difPos = Number(difPos);
+    difPos = Number(difPos) * -1;
     return difPos.toFixed(2);
 }
 
