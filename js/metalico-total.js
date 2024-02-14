@@ -1,6 +1,6 @@
 const tablaDatos = document.getElementById('tabla-metalico-total-datos');
 const tablaTotales = document.getElementById('tabla-metalico-total-totales');
-const ROW_COUNT = 2;
+const ROW_COUNT = 5;
 
 // Create input cell to add to row
 const createInputCell = (value, id) => {
@@ -36,13 +36,16 @@ const createValues = (rows) => {
     let values = [];
     for (let i = 0; i < rows; i++) {
         values.push({
-            name: `Caja ${i + 1}`,
+            // if i is even, name is Caja 3, else Caja 1
+            name: `Caja ${((i + 1) % 2 === 0) ? 3: 1}`,
             billetes: 0,
             monedas: 0,
             retirada: 0,
             total: 0
         });
     }
+    // update third row with its custom name
+    values[2].name = 'Caja HD';
     return values;
 }
 
@@ -138,14 +141,14 @@ difPos.addEventListener('input', (e) => {
 const setDifPos = (posvalue) => {
     const difPosValue = parseFloat(posvalue);
     const totalIngresado = totalValues.totalTotal;
-    const totalDifPos = (totalIngresado - difPosValue) ? totalIngresado - difPosValue : 0;
+    const totalDifPos = (totalIngresado - difPosValue) ? totalIngresado - difPosValue : totalIngresado;
     tablaTotales.querySelector('#total-dif-pos').textContent = totalDifPos + '€';
 }
 
 
-const onAddRowClicked = () => {
+const onAddRowClicked = (rowName) => {
     values.push({
-        name: `Caja ${values.length + 1}`,
+        name: `Caja ${rowName}`,
         billetes: 0,
         monedas: 0,
         retirada: 0,
