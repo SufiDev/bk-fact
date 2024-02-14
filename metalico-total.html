@@ -36,14 +36,14 @@
         </nav>
     </header>
     <div class="container-fluid my-5 py-5">
-        <div class="row">
+        <div class="row mb-4">
             <div class="col-12 text-center">
                 <h1 class="display-4">Hoja de metalico total</h1>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                <table class="table table-secondary table-bordered" id="tabla-metalico-total-datos">
+                <table class="table table-secondary table-bordered m-0" id="tabla-metalico-total-datos">
                     <thead>
                         <tr>
                             <th scope="col" class="table-danger"></th>
@@ -55,19 +55,31 @@
                     </thead>
                     <tbody>
                     </tbody>
-
                 </table>
             </div>
+            <div class="col-12 my-5">
+                <div class="row justify-content-between w-75 mx-auto">
+                    <div class="col-4">
+                        <input type="button" class="btn btn-danger py-5 w-100" value="Añadir caja 1" onclick="onAddRowClicked('1')">
+                    </div>
+                    <div class="col-4">
+                        <input type="button" class="btn btn-danger py-5 w-100" value="Añadir caja 3" onclick="onAddRowClicked('3')">
+                    </div>
+                    <div class="col-4">
+                        <input type="button" class="btn btn-danger py-5 w-100" value="Añadir caja HD" onclick="onAddRowClicked('HD')">
+                    </div>
+                </div>
+            </div>
             <div class="col-12">
-                <table class="table" id="tabla-metalico-total-totales">
+                <table class="table table-secondary table-bordered" id="tabla-metalico-total-totales">
                     <thead>
                         <tr>
-                            <th scope="col">Total billetes</th>
-                            <th scope="col">Total monedas</th>
-                            <th scope="col">Total retirada</th>
-                            <th scope="col">Total ingresado suma</th>
-                            <th scope="col">Efectivo POS</th>
-                            <th scope="col">Diferencia total - pos</th>
+                            <th scope="col" class="table-primary">Total billetes</th>
+                            <th scope="col" class="table-primary">Total monedas</th>
+                            <th scope="col" class="table-primary">Total retirada</th>
+                            <th scope="col" class="table-primary">Total ingresado suma</th>
+                            <th scope="col" class="table-primary">Efectivo POS</th>
+                            <th scope="col" class="table-primary">Diferencia total - pos</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -93,9 +105,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            <div class="col-12">
-                <input type="button" value="Añadir caja" onclick="onAddRowClicked()">
             </div>
         </div>
     </div>
