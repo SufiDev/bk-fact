@@ -46,7 +46,7 @@
                 <table class="table table-secondary table-bordered" id="tabla-metalico-total-datos">
                     <thead>
                         <tr>
-                            <th scope="col" class="table-danger">Caja</th>
+                            <th scope="col" class="table-danger"></th>
                             <th scope="col" class="table-danger">Cantidad billetes</th>
                             <th scope="col" class="table-danger">Cantidad monedas menos de 5&euro;</th>
                             <th scope="col" class="table-danger">Retirada</th>
@@ -54,72 +54,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">Caja 1</th>
-                            <td>
-                                <input type="number" class="form-control" id="caja1-billetes" min="0" />
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" id="caja1-monedas" min="0" />
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" id="caja1-retirada" min="0" />
-                            </td>
-                            <td>
-                                <p id="caja1-total" class="form-control caja-total caja1 m-0">0&euro;</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Caja 2</th>
-                            <td>
-                                <input type="number" class="form-control" id="caja2-billetes" min="0" />
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" id="caja2-monedas" min="0" />
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" id="caja2-retirada" min="0" />
-                            </td>
-                            <td>
-                                <p id="caja2-total" class="form-control caja-total caja2 m-0">0&euro;</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Caja 3</th>
-                            <td>
-                                <input type="number" class="form-control" id="caja3-billetes" min="0" />
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" id="caja3-monedas" min="0" />
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" id="caja3-retirada" min="0" />
-                            </td>
-                            <td>
-                                <p id="caja3-total" class="form-control caja-total caja3 m-0">0&euro;</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Caja HD</th>
-                            <td>
-                                <input type="number" class="form-control" id="caja4-billetes" min="0" />
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" id="caja4-monedas" min="0" />
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" id="caja4-retirada" min="0" />
-                            </td>
-                            <td>
-                                <p id="caja4-total" class="form-control caja-total caja4 m-0">0&euro;</p>
-                            </td>
-                        </tr>
                     </tbody>
 
                 </table>
             </div>
             <div class="col-12">
-                <table class="table" id="tabla-metalico-total-total">
+                <table class="table" id="tabla-metalico-total-totales">
                     <thead>
                         <tr>
                             <th scope="col">Total billetes</th>
@@ -153,6 +93,9 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="col-12">
+                <input type="button" value="Añadir caja" onclick="onAddRowClicked()">
             </div>
         </div>
     </div>

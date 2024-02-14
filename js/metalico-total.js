@@ -1,137 +1,155 @@
 const tablaDatos = document.getElementById('tabla-metalico-total-datos');
 const tablaTotales = document.getElementById('tabla-metalico-total-totales');
+const ROW_COUNT = 2;
 
-// Tabla datos
-// Cada vez que el usuario cambia el valor de un input, se actualiza la columna 'total'
-tablaDatos.addEventListener('input', (e) => {
-    const input = e.target;
-    // la fila es el tr más cercano al input
-    const fila = input.closest('tr');
-    const inputs = fila.querySelectorAll('input');
-    const currentRow = fila.rowIndex;
-    const total = fila.querySelector('.caja' + currentRow);
-    let suma = 0;
-    inputs.forEach((input) => {
-        // suma si el valor es un número y no está vacío
-        if (!isNaN(input.value) && input.value !== '') {
-            suma += parseFloat(input.value);
-        }
-    });
-    suma = suma.toFixed(2);
-    total.innerHTML = suma + '&euro;';
-    actualizarTotales();
-});
-
-// Actualiza los totales de la tabla
-function actualizarTotales() {
-    // Select the tbody element
-    var tbody = document.querySelector('tbody');
-
-    // Select all input fields with class 'form-control' within the tbody
-    var inputs = tbody.querySelectorAll('input.form-control');
-
-    // Create an empty object to store the columns organized by type
-    var columnsByType = {
-        billetes: [],
-        monedas: [],
-        retirada: [],
-        total: []
-    };
-
-    // Iterate over each input field
-    inputs.forEach(function (input) {
-        // Get the ID of the input field
-        var id = input.id;
-
-        // Extract the type of the column from the ID
-        var type = id.split('-')[1]; // Split the ID by '-' and get the third part
-
-        // Ensure the array exists before pushing elements into it
-        if (!columnsByType[type]) {
-            columnsByType[type] = [];
-        }
-
-        // Add the input field to the corresponding type in the columnsByType object
-        columnsByType[type].push(Number(input.value));
-    });
-
-    // Calculate the sum of each column
-    let sumaBilletes = 0;
-    columnsByType.billetes.forEach((input) => {
-        if (!isNaN(input) && input !== '') {
-
-            sumaBilletes += parseFloat(input);
-        }
-    });
-    sumaBilletes = sumaBilletes.toFixed(2);
-    document.getElementById('total-billetes').innerHTML = sumaBilletes + '&euro;';
-
-    let sumaMonedas = 0;
-    columnsByType.monedas.forEach((input) => {
-        if (!isNaN(input) && input !== '') {
-            sumaMonedas += parseFloat(input);
-        }
-    });
-    sumaMonedas = sumaMonedas.toFixed(2);
-    document.getElementById('total-monedas').innerHTML = sumaMonedas + '&euro;';
-
-    let sumaRetirada = 0;
-    columnsByType.retirada.forEach((input) => {
-        if (!isNaN(input) && input !== '') {
-            sumaRetirada += parseFloat(input);
-        }
-    });
-    sumaRetirada = sumaRetirada.toFixed(2);
-    document.getElementById('total-retirada').innerHTML = sumaRetirada + '&euro;';
-
-    let sumaTotal = 0;
-    columnsByType.total.forEach((input) => {
-        if (!isNaN(input) && input !== '') {
-            sumaTotal += parseFloat(input);
-        }
-    });
-    sumaTotal = sumaTotal.toFixed(2);
-
-
-    sumaTotales()
+// Create input cell to add to row
+const createInputCell = (value, id) => {
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.min = 0;
+    input.classList.add('form-control');
+    input.id = id;
+    return input;
 }
 
-const sumaTotales = () => {
-    // Select all <p> elements with the class 'caja-total'
-    var totalElements = document.querySelectorAll('p.caja-total');
-
-    // Initialize a variable to store the total sum
-    var totalSum = 0;
-
-    // Iterate through each <p> element
-    totalElements.forEach(function (element) {
-        // Get the value of the element if it's a number and not empty
-        var value = parseFloat(element.innerHTML.split('&euro;')[0]);
-        if (isNaN(value)) {
-            value = 0;
-        }
-        // Add the value to the total sum
-        totalSum += value;
-    });
-
-    // Display the total sum
-    console.log('Total sum:', totalSum);
-    document.getElementById('total-ingresado').innerHTML = totalSum + '&euro;';
-    document.getElementById('total-dif-pos').innerHTML = calculaDifPos(totalSum) + '&euro;';
+// Create table header to add to row
+const createHeaderCell = (value) => {
+    const header = document.createElement('th');
+    header.classList.add('table-danger');
+    header.scope = 'row';
+    header.appendChild(document.createTextNode(value));
+    return header;
 }
 
-const calculaDifPos = (sumaTotal) => {
-    let difPos = sumaTotal;
-    let efectivoPos = document.getElementById('efectivo-pos').value;
-    console.log('total' + sumaTotal + 'efectivo pos' + efectivoPos);
-    if (!isNaN(efectivoPos) && efectivoPos !== '') {
-        difPos -= parseFloat(efectivoPos);
+// Create paragraph cell to add to row
+const createParagraphCell = (value, id) => {
+    const paragraph = document.createElement('p');
+    paragraph.classList.add('form-control');
+    paragraph.classList.add('m-0');
+    paragraph.textContent = value + '€';
+    paragraph.id = id;
+    return paragraph;
+}
+
+// create an array of values to add to the table with a given ammount of rows
+const createValues = (rows) => {
+    let values = [];
+    for (let i = 0; i < rows; i++) {
+        values.push({
+            name: `Caja ${i + 1}`,
+            billetes: 0,
+            monedas: 0,
+            retirada: 0,
+            total: 0
+        });
     }
-    difPos = Number(difPos) * -1;
-    return difPos.toFixed(2);
+    return values;
 }
 
-// Actualiza el total de la tabla cuando introduce el efectivo en el POS
-document.getElementById('efectivo-pos').addEventListener('input', (e) => {
-    actualizarTotales();
+let values = createValues(ROW_COUNT);
+console.log("create values array", values);
+
+const createElementsFromValues = (values) => {
+    return values.map((value, i) => {
+        const elements = [];
+        elements.push(createHeaderCell(value.name));
+        elements.push(createInputCell(value.billetes, `billetes-${i}`));
+        elements.push(createInputCell(value.monedas, `monedas-${i}`));
+        elements.push(createInputCell(value.retirada, `retirada-${i}`));
+        elements.push(createParagraphCell(value.total, `total-${i}`));
+        return elements;
+    });
+}
+
+tablaDatos.classList.add('text-center');
+
+
+// Add row to table
+const addRow = (table, element) => {
+    const row = table.insertRow(-1);
+    // add header
+    row.appendChild(element[0]);
+
+    // add rest of the cells
+    for (let i = 1; i < element.length; i++) {
+        const cell = row.insertCell(i);
+        cell.appendChild(element[i]);
+    }
+}
+
+for(let i = 0; i < ROW_COUNT; i++) {
+    addRow(tablaDatos.querySelector("tbody"), createElementsFromValues(values)[i]);
+}
+
+tablaDatos.addEventListener('input', (e) => {
+    // target is input element inside cell so we need to get the cell and row index from the parent elements (cell and row)
+    const cellIndex = e.target.parentElement.cellIndex;
+    const rowIndex = e.target.parentElement.parentElement.rowIndex;
+
+    // update values array with new value
+    // cell index comes from the input id: billetes-2, monedas-2, etc
+    // value is either a number or 0
+    values[rowIndex - 1][e.target.id.split('-')[0]] = (e.target.value) ? parseFloat(e.target.value) : 0;
+
+    const total = parseFloat(values[rowIndex - 1].billetes) + parseFloat(values[rowIndex - 1].monedas) + parseFloat(values[rowIndex - 1].retirada);
+    values[rowIndex - 1].total = total;
+    tablaDatos.querySelector(`#total-${rowIndex - 1}`).textContent = values[rowIndex - 1].total + '€';
+
+    updateTotalValues();
 });
+
+const totalValues = {
+    totalBilletes: 0,
+    totalMonedas: 0,
+    totalRetirada: 0,
+    totalTotal: 0
+}
+
+const updateTotalValues = () => {
+    // empty total values to recalculate
+    totalValues.totalBilletes = 0;
+    totalValues.totalMonedas = 0;
+    totalValues.totalRetirada = 0;
+    totalValues.totalTotal = 0;
+
+    // calculate new total values from values array
+    values.forEach((value) => {
+        totalValues.totalBilletes += parseFloat(value.billetes);
+        totalValues.totalMonedas += parseFloat(value.monedas);
+        totalValues.totalRetirada += parseFloat(value.retirada);
+        totalValues.totalTotal += parseFloat(value.total);
+    });
+    
+    // update total values in table
+    tablaTotales.querySelector('#total-billetes').textContent =  totalValues.totalBilletes + '€';
+    tablaTotales.querySelector('#total-monedas').textContent =  totalValues.totalMonedas + '€';
+    tablaTotales.querySelector('#total-retirada').textContent =  totalValues.totalRetirada + '€';
+    tablaTotales.querySelector('#total-ingresado').textContent =  totalValues.totalTotal + '€';
+    setDifPos();
+}
+
+const totalPos = document.getElementById('total-dif-pos');
+const difPos = document.getElementById('efectivo-pos');
+
+difPos.addEventListener('input', (e) => {
+    setDifPos(e.target.value);
+});
+
+const setDifPos = (posvalue) => {
+    const difPosValue = parseFloat(posvalue);
+    const totalIngresado = totalValues.totalTotal;
+    const totalDifPos = (totalIngresado - difPosValue) ? totalIngresado - difPosValue : 0;
+    tablaTotales.querySelector('#total-dif-pos').textContent = totalDifPos + '€';
+}
+
+
+const onAddRowClicked = () => {
+    values.push({
+        name: `Caja ${values.length + 1}`,
+        billetes: 0,
+        monedas: 0,
+        retirada: 0,
+        total: 0
+    });
+    addRow(tablaDatos.querySelector("tbody"), createElementsFromValues(values)[values.length - 1]);
+}
