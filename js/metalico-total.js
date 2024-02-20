@@ -141,7 +141,7 @@ difPos.addEventListener('input', (e) => {
 const setDifPos = (posvalue) => {
     const difPosValue = parseFloat(posvalue);
     const totalIngresado = totalValues.totalTotal;
-    const totalDifPos = isNaN(difPosValue) ? totalIngresado - difPosValue : totalIngresado;
+    const totalDifPos = isNaN(difPosValue) ? totalIngresado : totalIngresado - difPosValue;
     tablaTotales.querySelector('#total-dif-pos').textContent = totalDifPos + '€';
 }
 
